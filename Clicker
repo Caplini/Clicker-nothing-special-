@@ -16,12 +16,13 @@ def check_values():
     global rebirths
     global rebirthtoken
     global perm_poweradd
+    global extramoney
 
     if os.path.exists("DATAclicks.txt") == True:
         pass
     else:
         saveclicks = open("DATAclicks.txt", "w")
-        saveclicks.writelines(["0", "\n1", "\n1000000", "\n0", "\n0", "\n0"])
+        saveclicks.writelines(["0", "\n1", "\n1000000", "\n0", "\n0", "\n0", "\n0"])
         saveclicks.close()
 
 
@@ -30,7 +31,7 @@ def check_values():
     val1clickspower = saveclicks.readlines()
 
     with open("DATAclicks.txt") as f:
-            [int(x) for x in f]
+        [int(x) for x in f]
             
     perm_power = int(val1clicks[5])
 
@@ -40,6 +41,7 @@ def check_values():
     rebirthamount = int(val1clicks[2])
     rebirths = int(val1clicks[3])
     rebirthtoken = int(val1clicks[4])
+    extramoney = int(val1clicks[6])
 
     perm_poweradd = 2000
 
@@ -61,8 +63,12 @@ rebirthshop.grid(row=1, column=2, pady=10, padx=10, sticky="w")
 def timesclicked():
     global clicked
     global click_power
+    global extramoney
+    
+    extramoney += rebirths/10 + click_power
+    extramoney = int(extramoney)
 
-    clicked += click_power
+    clicked += int(click_power) + int(extramoney)
     print(clicked)
     clicks.config(text=f"You Have Clicks: {clicked}")
     clicks.grid(row=1, column=0, pady=10, padx=10, sticky="w")
@@ -91,6 +97,7 @@ def more_click_power():
 
     if clicked < 200:
         return
+
 
     click_power += 1
     clicked = clicked - 200
@@ -163,7 +170,7 @@ rebirthlabl.grid(row=0, column=1, pady=10, padx=10, sticky="w")
 rebirthtokenlabl = Label(frame2, text=f"Rebirths Tokens: {rebirthtoken}", bg="#697ace", fg="white")
 rebirthtokenlabl.grid(row=0, column=2, pady=10, padx=10, sticky="w")
 
-megaclick = Button(rebirthshop, text="Mega Power (2 RebirthTokens)", bg="#697ace", fg="white", command=megapower)
+megaclick = Button(rebirthshop, text="Mega Power (2 RebirthTokens) +2000 power", bg="#697ace", fg="white", command=megapower)
 megaclick.grid(row=0, column=0, pady=10, padx=10, sticky="n")
 
 
@@ -172,7 +179,7 @@ mainloop()
 
 def save_values():
     saveclicks = open("DATAclicks.txt", "w")
-    saveclicks.writelines([f"{clicked}", f"\n{click_power}", f"\n{rebirthamount}", f"\n{rebirths}", f"\n{rebirthtoken}", f"\n{perm_power}"])
+    saveclicks.writelines([f"{clicked}", f"\n{click_power}", f"\n{rebirthamount}", f"\n{rebirths}", f"\n{rebirthtoken}", f"\n{perm_power}", f"\n{extramoney}"])
     saveclicks.close()
 
 save_values()
