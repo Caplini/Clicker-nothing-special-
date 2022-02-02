@@ -1,0 +1,96 @@
+from cProfile import label
+from re import L
+import tkinter
+from tkinter import *
+from tkinter.font import Font
+from tkinter import ttk
+from unittest import TextTestResult
+import os.path
+
+if os.path.exists("DATAclicks.txt") == True:
+    pass
+else:
+    saveclicks = open("DATAclicks.txt", "w")
+    saveclicks.writelines(["0", "\n1"])
+    saveclicks.close()
+
+
+saveclicks = open("DATAclicks.txt", "r")
+val1clicks = saveclicks.readlines()
+val1clickspower = saveclicks.readlines()
+
+with open("DATAclicks.txt") as f:
+        [int(x) for x in f]
+        
+
+clicked = int(val1clicks[0])
+click_power = int(val1clicks[1])
+
+
+root = Tk()
+root.config(bg="#697ace")
+
+frame = Frame(root, bg="#697ace")
+frame.grid(row=1, column=0, pady=10, padx=10, sticky="w")
+
+def timesclicked():
+    global clicked
+    global click_power
+
+    clicked += click_power
+    print(clicked)
+    clicks.config(text=f"You Have Clicks: {clicked}")
+    clicks.grid(row=1, column=0, pady=10, padx=10, sticky="w")
+
+def clear():
+    global clicked
+    global click_power
+
+    clicked = 0
+    clicks.config(text=f"You Have Clicks: {clicked}")
+
+    click_power = 1
+    clickpower.config(text=f"You Click Power is: {click_power}")
+
+    saveclicks = open("DATAclicks.txt", "a")
+    saveclicks.write([clicked, click_power])
+    saveclicks.close()
+
+    # savepower = open("DATApower.txt", "a")
+    # savepower.write(clicked)
+    # savepower.close()
+
+def more_click_power():
+    global click_power
+    global clicked
+
+    if clicked < 100:
+        return
+
+    click_power += 1
+    clicked = clicked - 100
+    clicks.config(text=f"You Have Clicks: {clicked}")
+    clickpower.config(text=f"Your Click Power is: {click_power}")
+    
+
+clickspot = Button(root, text="Click Me", width=50, height=10, bg="#69cea1", fg="white" ,command=timesclicked)
+clickspot.grid(row=0, column=0, pady=10, padx=10, sticky="n")
+
+clicks = Label(frame, text=f"You Have Clicks: {clicked}", bg="#697ace", fg="white")
+clicks.grid(row=1, column=0, pady=10, padx=10, sticky="w")
+
+clearbut = Button(frame, text="Clear", command=clear, bg="#697ace", fg="white")
+clearbut.grid(row=1, column=2, pady=10, padx=10, sticky="w")
+
+morepower = Button(frame, text="Buy More Power (100)", bg="#697ace", fg="white", command=more_click_power)
+morepower.grid(row=1, column=3, pady=10, padx=10, sticky="w")
+
+clickpower = Label(frame, text=f"You Click Power is: {click_power}", bg="#697ace", fg="white")
+clickpower.grid(row=2, column=0, pady=10, padx=10, sticky="w")
+
+
+mainloop()
+
+saveclicks = open("DATAclicks.txt", "w")
+saveclicks.writelines([f"{clicked}", f"\n{click_power}"])
+saveclicks.close()
