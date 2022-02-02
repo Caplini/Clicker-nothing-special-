@@ -1,4 +1,5 @@
 from cProfile import label
+from math import perm
 from re import L
 import tkinter
 from tkinter import *
@@ -7,28 +8,42 @@ from tkinter import ttk
 from unittest import TextTestResult
 import os.path
 
-if os.path.exists("DATAclicks.txt") == True:
-    pass
-else:
-    saveclicks = open("DATAclicks.txt", "w")
-    saveclicks.writelines(["0", "\n1", "\n1000000", "\n0", "\n0"])
-    saveclicks.close()
+def check_values():
+    global perm_power
+    global clicked
+    global click_power
+    global rebirthamount
+    global rebirths
+    global rebirthtoken
+    global perm_poweradd
+
+    if os.path.exists("DATAclicks.txt") == True:
+        pass
+    else:
+        saveclicks = open("DATAclicks.txt", "w")
+        saveclicks.writelines(["0", "\n1", "\n1000000", "\n0", "\n0", "\n0"])
+        saveclicks.close()
 
 
-saveclicks = open("DATAclicks.txt", "r")
-val1clicks = saveclicks.readlines()
-val1clickspower = saveclicks.readlines()
+    saveclicks = open("DATAclicks.txt", "r")
+    val1clicks = saveclicks.readlines()
+    val1clickspower = saveclicks.readlines()
 
-with open("DATAclicks.txt") as f:
-        [int(x) for x in f]
-        
+    with open("DATAclicks.txt") as f:
+            [int(x) for x in f]
+            
+    perm_power = int(val1clicks[5])
 
-clicked = int(val1clicks[0])
-click_power = int(val1clicks[1])
+    clicked = int(val1clicks[0])
+    click_power = int(val1clicks[1]) + perm_power
 
-rebirthamount = int(val1clicks[2])
-rebirths = int(val1clicks[3])
-rebirthtoken = int(val1clicks[4])
+    rebirthamount = int(val1clicks[2])
+    rebirths = int(val1clicks[3])
+    rebirthtoken = int(val1clicks[4])
+
+    perm_poweradd = 2000
+
+check_values()
 
 
 root = Tk()
@@ -39,6 +54,9 @@ frame.grid(row=2, column=0, pady=10, padx=10, sticky="w")
 
 frame2 = Frame(root, bg="#697ace")
 frame2.grid(row=0, column=0, pady=10, padx=10, sticky="w")
+
+rebirthshop = Frame(root, bg="#697ace")
+rebirthshop.grid(row=1, column=2, pady=10, padx=10, sticky="w")
 
 def timesclicked():
     global clicked
@@ -89,8 +107,8 @@ def rebirthadd():
     if clicked < rebirthamount:
         return
 
-    clicked = 0
-    click_power = 1
+    clicked = 0 
+    click_power = 1 + perm_power
     clicks.config(text=f"You Have Clicks: {clicked}")
     clickpower.config(text=f"Your Click Power is: {click_power}")
     
@@ -103,7 +121,22 @@ def rebirthadd():
     rebirthtokenlabl.config(text=f"Rebirths Tokens: {rebirthtoken}")
 
     print(rebirthamount)
-    
+
+def megapower():
+    global rebirthtoken
+    global click_power
+    global perm_power
+
+    if rebirthtoken < 2:
+        return
+
+    rebirthtoken = rebirthtoken - 2
+    rebirthtokenlabl.config(text=f"Rebirths Tokens: {rebirthtoken}")
+    perm_power += 2000
+    click_power += perm_poweradd
+
+
+    clickpower.config(text=f"You Click Power is: {click_power}")
     
 
 clickspot = Button(root, text="Click Me", width=50, height=10, bg="#69cea1", fg="white" ,command=timesclicked)
@@ -130,11 +163,16 @@ rebirthlabl.grid(row=0, column=1, pady=10, padx=10, sticky="w")
 rebirthtokenlabl = Label(frame2, text=f"Rebirths Tokens: {rebirthtoken}", bg="#697ace", fg="white")
 rebirthtokenlabl.grid(row=0, column=2, pady=10, padx=10, sticky="w")
 
+megaclick = Button(rebirthshop, text="Mega Power (2 RebirthTokens)", bg="#697ace", fg="white", command=megapower)
+megaclick.grid(row=0, column=0, pady=10, padx=10, sticky="n")
 
 
 
 mainloop()
 
-saveclicks = open("DATAclicks.txt", "w")
-saveclicks.writelines([f"{clicked}", f"\n{click_power}", f"\n{rebirthamount}", f"\n{rebirths}", f"\n{rebirthtoken}"])
-saveclicks.close()
+def save_values():
+    saveclicks = open("DATAclicks.txt", "w")
+    saveclicks.writelines([f"{clicked}", f"\n{click_power}", f"\n{rebirthamount}", f"\n{rebirths}", f"\n{rebirthtoken}", f"\n{perm_power}"])
+    saveclicks.close()
+
+save_values()
