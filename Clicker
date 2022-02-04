@@ -145,7 +145,10 @@ def megapower():
 
 def autoclickerbuy():
     global autoclickcheck
+    global rebirthtoken
 
+    rebirthtoken = rebirthtoken - 5
+    rebirthtokenlabl.config(text=f"Rebirths Tokens: {rebirthtoken}")
     autoclickcheck += 1
 
 def autoclicker():
